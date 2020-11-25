@@ -5,11 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CarSharing.Data;
 using Microsoft.EntityFrameworkCore;
+using CarSharing.Data;
+using CarSharing.Models;
+using Microsoft.AspNetCore.Identity;
+using CarSharing.Middleware;
+using CarSharing.Services;
 
 namespace CarSharing
 {
@@ -25,9 +30,27 @@ namespace CarSharing
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionsString = Configuration.GetConnectionString("SQLConnection");
-            services.AddDbContext<car_sharingContext>(options => options.UseSqlServer(connectionsString));
-            services.AddControllersWithViews();
+            string connectionString = Configuration.GetConnectionString("SQLConnection");
+            services.AddDbContext<car_sharingContext>(options => options.UseSqlServer(connectionString));
+
+            string sqlConnectionIdentityString = Configuration.GetConnectionString("SqlServerIdentity");
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(sqlConnectionIdentityString));
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>();
+
+            services.AddTransient<CacheProvider>();
+            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
+            services.AddControllersWithViews(options =>
+            {
+                options.CacheProfiles.Add("CacheProfile",
+                    new CacheProfile()
+                    {
+                        Duration = 262
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,12 +66,15 @@ namespace CarSharing
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseRoleInitializer();
 
             app.UseEndpoints(endpoints =>
             {

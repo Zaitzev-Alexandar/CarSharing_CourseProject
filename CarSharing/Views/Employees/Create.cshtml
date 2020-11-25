@@ -1,0 +1,47 @@
+﻿@model CarSharing.ViewModels.Entities.EmployeeViewModel;
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container text-center w-50">
+    <form method="post">
+        <h2>Create a new entity</h2>
+
+        <div>
+            <input hidden asp-for="PageViewModel.CurrentPage" value="@Model.PageViewModel.CurrentPage" />
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger text-justify w-100 m-lg-0"></div>
+
+        <p>
+            <label asp-for="Entity.Post"></label><br />
+            <input asp-for="Entity.Post" class="w-75" />
+        <p><span asp-validation-for="Entity.Post" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Name"></label><br />
+            <input asp-for="Entity.Name" class="w-75" />
+        <p><span asp-validation-for="Entity.Name" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Surname"></label><br />
+            <input asp-for="Entity.Surname" class="w-75" />
+        <p><span asp-validation-for="Entity.Surname" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Patronymic"></label><br />
+            <input asp-for="Entity.Patronymic" class="w-75" />
+        <p><span asp-validation-for="Entity.Patronymic" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.EmploymentDate"></label><br />
+            <input asp-for="Entity.EmploymentDate" type="date" class="w-75" />
+        <p><span asp-validation-for="Entity.EmploymentDate" class="text-danger"></span></p>
+
+
+        <p>
+            <input type="submit" value="Add" class="btn btn-success w-75" />
+
+        <p><a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger w-75">Back</a></p>
+    </form>
+</div>
