@@ -1,0 +1,64 @@
+﻿@model CarSharing.ViewModels.Entities.CarViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container w-50">
+    <table class="table table-sm">
+        <thead class="thead-dark text-center">
+            <tr>
+                <th colspan="2">Detailed description of Car with VINcode "@Model.Entity.VINcode"</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+            <tr>
+                <td><label asp-for="Entity.EngineNum"></label></td>
+                <td>@Model.Entity.EngineNum</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.IssueDate"></label></td>
+                <td>@Model.Entity.IssueDate</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.Price"></label></td>
+                <td>@Model.Entity.Price</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.RegNum"></label></td>
+                <td>@Model.Entity.RegNum</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.RentalPrice"></label></td>
+                <td>@Model.Entity.RentalPrice</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.ReturnMark"></label></td>
+                <td>@Model.Entity.ReturnMark</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.SpecMark"></label></td>
+                <td>@Model.Entity.SpecMark</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.Specs"></label></td>
+                <td>@Model.Entity.Specs</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.TechnicalMaintenanceDate"></label></td>
+                <td>@Model.Entity.TechnicalMaintenanceDate</td>
+            </tr>
+            <tr>
+                <td><label asp-for="Entity.VINcode"></label></td>
+                <td>@Model.Entity.VINcode</td>
+            </tr>
+
+
+
+        </tbody>
+    </table>
+
+    <p>
+    <p><a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger w-100">Back</a></p>
+</div>

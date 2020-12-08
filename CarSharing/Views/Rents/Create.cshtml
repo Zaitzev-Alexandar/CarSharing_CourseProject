@@ -1,0 +1,74 @@
+﻿@model CarSharing.ViewModels.Entities.RentViewModel;
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container text-center w-50">
+    <form method="post">
+        <h2>Create a new entity</h2>
+
+        <div>
+            <input hidden asp-for="PageViewModel.CurrentPage" value="@Model.PageViewModel.CurrentPage" />
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger text-justify w-100 m-lg-0"></div>
+
+        <p>
+            <label asp-for="Entity.DeliveryDate"></label><br />
+            <input asp-for="Entity.DeliveryDate" type="date" class="w-75" />
+        <p><span asp-validation-for="Entity.DeliveryDate" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.ReturnDate"></label><br />
+            <input asp-for="Entity.ReturnDate" type="date" class="w-75" />
+        <p><span asp-validation-for="Entity.ReturnDate" class="text-danger"></span></p>
+
+
+        <p>
+            <label asp-for="Entity.Price"></label><br />
+            <input asp-for="Entity.Price" type="number" class="w-75" />
+        <p><span asp-validation-for="Entity.Price" class="text-danger"></span></p>
+
+
+
+
+
+        <p>
+            <label asp-for="Entity.CarId"></label><br />
+            <input type="search" list="cars" asp-for="CarVINcode" class="w-75" />
+            <datalist id="cars">
+                @foreach (var item in Model.CarSelectList)
+                {
+                    <option value="@item.VINcode"></option>
+                }
+            </datalist>
+        <p><span asp-validation-for="Entity.CarId" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.EmployeeId"></label><br />
+            <input type="search" list="employees" asp-for="EmplpoyeeName" class="w-75" />
+            <datalist id="employees">
+                @foreach (var item in Model.EmployeeSelectList)
+                {
+                    <option value="@item.Name"></option>
+                }
+            </datalist>
+        <p><span asp-validation-for="Entity.EmployeeId" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.CustomerId"></label><br />
+            <input type="search" list="customers" asp-for="CustomerName" class="w-75" />
+            <datalist id="customers">
+                @foreach (var item in Model.CustomerSelectList)
+                {
+                    <option value="@item.Name"></option>
+                }
+            </datalist>
+        <p><span asp-validation-for="Entity.CustomerId" class="text-danger"></span></p>
+
+        <p>
+            <input type="submit" value="Add" class="btn btn-success w-75" />
+
+        <p><a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger w-75">Back</a></p>
+    </form>
+</div>

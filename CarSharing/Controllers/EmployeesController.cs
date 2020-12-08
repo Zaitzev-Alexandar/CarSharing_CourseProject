@@ -13,7 +13,7 @@ using CarSharing.ViewModels;
 using CarSharing.ViewModels.Entities;
 using CarSharing.ViewModels.Filters;
 
-namespace Lab5_WebApp.Controllers
+namespace CarSharing.Controllers
 {
     [Authorize]
     public class EmployeesController : Controller
@@ -29,16 +29,16 @@ namespace Lab5_WebApp.Controllers
             cache = cacheProvider;
         }
 
-        public IActionResult Index(SortState sortState = SortState.EmployeesNameAsc, int page = 1)
+        public IActionResult Index(SortState sortState, int page = 1)
         {
             EmployeesFilterViewModel filter = HttpContext.Session.Get<EmployeesFilterViewModel>(filterKey);
             if (filter == null)
             {
-                filter = new EmployeesFilterViewModel { EmployeeName = string.Empty };
+                filter = new EmployeesFilterViewModel { EmployeeName = string.Empty, EmployeeSurname = string.Empty, EmployeePatronymic = string.Empty, EmployeePost = string.Empty };
                 HttpContext.Session.Set(filterKey, filter);
             }
 
-            string modelKey = $"{typeof(Employee).Name}-{page}-{sortState}-{filter.EmployeePost}-{filter.EmployeeName}-{filter.EmployeeSurname} -{filter.EmployeePatronymic}";
+            string modelKey = $"{typeof(Employee).Name}-{page}-{sortState}-{filter.EmployeeName}-{filter.EmployeeSurname} -{filter.EmployeePatronymic}-{filter.EmployeePost}";
             if (!cache.TryGetValue(modelKey, out EmployeeViewModel model))
             {
                 model = new EmployeeViewModel();
@@ -98,7 +98,7 @@ namespace Lab5_WebApp.Controllers
 
                 cache.Clean();
 
-                return RedirectToAction("Index", "Employees");
+                return RedirectToAction("Index", "employees");
             }
 
             return View(model);
@@ -138,7 +138,7 @@ namespace Lab5_WebApp.Controllers
 
                     cache.Clean();
 
-                    return RedirectToAction("Index", "Employees", new { page = model.PageViewModel.CurrentPage });
+                    return RedirectToAction("Index", "employees", new { page = model.PageViewModel.CurrentPage });
                 }
                 else
                 {
@@ -208,18 +208,13 @@ namespace Lab5_WebApp.Controllers
                 return false;
         }
 
-        private IQueryable<Employee> GetSortedEntities(SortState sortState,string employeePost, string employeeName, string employeeSurname, string employeePatronymic)
+        private IQueryable<Employee> GetSortedEntities(SortState sortState,string employeePost, string employeeName, string employeesurname, string employeePatronymic)
         {
             IQueryable<Employee> employees = db.Employees.AsQueryable();
 
             switch (sortState)
             {
-                case SortState.EmployeesPostAsc:
-                    employees = employees.OrderBy(g => g.Post);
-                    break;
-                case SortState.EmployeesPostDesc:
-                    employees = employees.OrderByDescending(g => g.Post);
-                    break;
+
                 case SortState.EmployeesNameAsc:
                     employees = employees.OrderBy(g => g.Name);
                     break;
@@ -238,14 +233,26 @@ namespace Lab5_WebApp.Controllers
                 case SortState.EmployeesPatronymicDesc:
                     employees = employees.OrderByDescending(g => g.Patronymic);
                     break;
+                case SortState.EmployeesPostAsc:
+                    employees = employees.OrderBy(g => g.Post);
+                    break;
+                case SortState.EmployeesPostDesc:
+                    employees = employees.OrderByDescending(g => g.Post);
+                    break;
+                case SortState.EmployeesEmploymentDateAsc:
+                    employees = employees.OrderBy(g => g.EmploymentDate);
+                    break;
+                case SortState.EmployeesEmploymentDateDesc:
+                    employees = employees.OrderByDescending(g => g.EmploymentDate);
+                    break;
             }
 
             if (!string.IsNullOrEmpty(employeePost))
                 employees = employees.Where(g => g.Post.Contains(employeePost)).AsQueryable();
             if (!string.IsNullOrEmpty(employeeName))
                 employees = employees.Where(g => g.Name.Contains(employeeName)).AsQueryable();
-            if (!string.IsNullOrEmpty(employeeSurname))
-                employees = employees.Where(g => g.Surname.Contains(employeeSurname)).AsQueryable();
+            if (!string.IsNullOrEmpty(employeesurname))
+                employees = employees.Where(g => g.Surname.Contains(employeesurname)).AsQueryable();
             if (!string.IsNullOrEmpty(employeePatronymic))
                 employees = employees.Where(g => g.Patronymic.Contains(employeePatronymic)).AsQueryable();
 

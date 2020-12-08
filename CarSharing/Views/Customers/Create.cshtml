@@ -1,0 +1,65 @@
+﻿@model CarSharing.ViewModels.Entities.CustomerViewModel;
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container text-center w-50">
+    <form method="post">
+        <h2>Create a new entity</h2>
+
+        <div>
+            <input hidden asp-for="PageViewModel.CurrentPage" value="@Model.PageViewModel.CurrentPage" />
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger text-justify w-100 m-lg-0"></div>
+
+
+        <p>
+            <label asp-for="Entity.Name"></label><br />
+            <input asp-for="Entity.Name" class="w-75" />
+        <p><span asp-validation-for="Entity.Name" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Surname"></label><br />
+            <input asp-for="Entity.Surname" class="w-75" />
+        <p><span asp-validation-for="Entity.Surname" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Patronymic"></label><br />
+            <input asp-for="Entity.Patronymic" class="w-75" />
+        <p><span asp-validation-for="Entity.Patronymic" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.PhoneNum"></label><br />
+            <input asp-for="Entity.PhoneNum" class="w-75" />
+        <p><span asp-validation-for="Entity.PhoneNum" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Address"></label><br />
+            <input asp-for="Entity.Address" class="w-75" />
+        <p><span asp-validation-for="Entity.Address" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.BirthDate"></label><br />
+            <input asp-for="Entity.BirthDate" type="date" class="w-75" />
+        <p><span asp-validation-for="Entity.BirthDate" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.PassportInfo"></label><br />
+            <input asp-for="Entity.PassportInfo" class="w-75" />
+        <p><span asp-validation-for="Entity.PassportInfo" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.Gender"></label><br />
+            <select asp-for="Entity.Gender" class="w-75">
+                <option value="true">Male</option>
+                <option value="false">Female</option>
+            </select>
+        <p><span asp-validation-for="Entity.Gender" class="text-danger"></span></p>
+
+        <p>
+            <input type="submit" value="Add" class="btn btn-success w-75" />
+
+        <p><a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger w-75">Back</a></p>
+    </form>
+</div>

@@ -13,8 +13,7 @@
 
         <fieldset class="p-2 float-right">
             <form method="post" asp-route-page="@Model.PageViewModel.CurrentPage">
-                <label asp-for="EmployeesFilterViewModel.EmployeePost"></label>
-                <input name="EmployeePost" value="@Model.EmployeesFilterViewModel.EmployeePost" />
+
 
                 <label asp-for="EmployeesFilterViewModel.EmployeeName"></label>
                 <input name="EmployeeName" value="@Model.EmployeesFilterViewModel.EmployeeName" />
@@ -25,6 +24,9 @@
                 <label asp-for="EmployeesFilterViewModel.EmployeePatronymic"></label>
                 <input name="EmployeePatronymic" value="@Model.EmployeesFilterViewModel.EmployeePatronymic" />
 
+                <label asp-for="EmployeesFilterViewModel.EmployeePost"></label>
+                <input name="EmployeePost" value="@Model.EmployeesFilterViewModel.EmployeePost" />
+
 
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </form>
@@ -34,11 +36,6 @@
     <table class="table table-hover table-sm">
         <thead class="thead-dark text-center text-white">
             <tr>
-                <th class="w-25">
-                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.EmployeesPostSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
-                        @Html.DisplayNameFor(e => e.Entity.Post)
-                    </a>
-                </th>
                 <th class="w-25">
                     <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.EmployeesNameSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
                         @Html.DisplayNameFor(e => e.Entity.Name)
@@ -54,6 +51,19 @@
                         @Html.DisplayNameFor(e => e.Entity.Patronymic)
                     </a>
                 </th>
+
+                <th class="w-25">
+                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.EmployeesPostSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                        @Html.DisplayNameFor(e => e.Entity.Post)
+                    </a>
+                </th>
+
+                <th class="w-25">
+                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.EmployeesEmploymentDateSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                        @Html.DisplayNameFor(e => e.Entity.EmploymentDate)
+                    </a>
+                </th>
+
                 <th class="w-25 align-middle">Modification</th>
             </tr>
         </thead>
@@ -61,16 +71,18 @@
         <tbody>
             @foreach (var entity in Model.Entities)
             {
-                <tr>
-                    <td>@entity.Post</td>
-                    <td>@entity.Name</td>
-                    <td>@entity.Surname</td>
-                    <td>@entity.Patronymic</td>
-                    <td class="text-center">
-                        <a asp-action="Edit" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+
+                <td>@entity.Name</td>
+                <td>@entity.Surname</td>
+                <td>@entity.Patronymic</td>
+                <td>@entity.Post</td>
+                <td>@entity.EmploymentDate</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

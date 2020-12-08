@@ -1,6 +1,6 @@
-﻿@model CarSharing.ViewModels.Entities.CarModelViewModel
+﻿@model CarSharing.ViewModels.Entities.AdditionalServiceViewModel
 @{
-    ViewData["Title"] = "CarModels";
+    ViewData["Title"] = "AdditionalServices";
 }
 
 <div class="container w-100">
@@ -13,10 +13,13 @@
 
         <fieldset class="p-2 float-right">
             <form method="post" asp-route-page="@Model.PageViewModel.CurrentPage">
-                <label asp-for="CarModelsFilterViewModel.CarModelName"></label>
-                <input name="CarModelName" value="@Model.CarModelsFilterViewModel.CarModelName" />
+                <label asp-for="AdditionalServicesFilterViewModel.AdditionalServiceRentId"></label>
+                <input name="AdditionalServiceRentId" value="@Model.AdditionalServicesFilterViewModel.AdditionalServiceRentId" type="number" />
 
+                <label asp-for="AdditionalServicesFilterViewModel.AdditionalServiceServiceName"></label>
+                <input name="AdditionalServiceServiceName" value="@Model.AdditionalServicesFilterViewModel.AdditionalServiceServiceName" type="datetime" />
 
+                
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </form>
         </fieldset>
@@ -26,17 +29,15 @@
         <thead class="thead-dark text-center text-white">
             <tr>
                 <th class="w-25">
-                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.CarModelsNameSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
-                        @Html.DisplayNameFor(e => e.Entity.Name)
+                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.AdditionalServiceRentIdSort'" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                        @Html.DisplayNameFor(e => e.Entity.Rent.RentId)
                     </a>
                 </th>
-
                 <th class="w-25">
-                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.CarMarkNameSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
-                        @Html.DisplayNameFor(e => e.Entity.CarMark.Name)
+                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.AdditionalServiceServiceNameSort'" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                        @Html.DisplayNameFor(e => e.Entity.Service.Name)
                     </a>
                 </th>
-                <th class="w-25 align-middle">Modification</th>
             </tr>
         </thead>
 
@@ -44,12 +45,12 @@
             @foreach (var entity in Model.Entities)
             {
                 <tr>
-                    <td>@entity.Name</td>
-                    <td>@entity.CarMark.Name</td>
+                    <td>@entity.Rent.RentId</td>
+                    <td>@entity.Service.Name</td>
                     <td class="text-center">
-                        <a asp-action="Details" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Details</a>
-                        <a asp-action="Edit" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                       
+                        <a asp-action="Edit" asp-route-id="@entity.Id" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@entity.Id" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }
@@ -75,3 +76,4 @@
         </div>
     </div>
 </div>
+

@@ -1,0 +1,44 @@
+﻿@model CarSharing.ViewModels.Entities.AdditionalServiceViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container text-center w-50">
+    <form method="post">
+        <h2>Create a new entity</h2>
+
+        <div>
+            <input hidden asp-for="PageViewModel.CurrentPage" value="@Model.PageViewModel.CurrentPage" />
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger text-justify w-100 m-lg-0"></div>
+
+        <p>
+            <label asp-for="Entity.RentId"></label><br />
+            <input type="search" list="rents" asp-for="RentId" class="w-75" />
+            <datalist id="rents">
+                @foreach (var item in Model.RentSelectList)
+                {
+                    <option value="@item.RentId"></option>
+                }
+            </datalist>
+        <p><span asp-validation-for="Entity.ServiceId" class="text-danger"></span></p>
+
+        <p>
+            <label asp-for="Entity.ServiceId"></label><br />
+            <input type="search" list="services" asp-for="ServiceName" class="w-75" />
+            <datalist id="services">
+                @foreach (var item in Model.ServiceSelectList)
+                {
+                    <option value="@item.Name"></option>
+                }
+            </datalist>
+        <p><span asp-validation-for="Entity.ServiceId" class="text-danger"></span></p>
+
+        <p>
+            <input type="submit" value="Add" class="btn btn-success w-75" />
+
+        <p><a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger w-75">Back</a></p>
+    </form>
+</div>

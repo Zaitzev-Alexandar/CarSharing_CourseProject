@@ -7,7 +7,7 @@ namespace CarSharing.Models
     {
         public Service()
         {
-            AdditionalServices = new HashSet<AdditionalService>();
+            AdditionalServices = new List<AdditionalService>();
         }
 
         public int ServiceId { get; set; }

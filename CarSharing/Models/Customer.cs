@@ -7,7 +7,7 @@ namespace CarSharing.Models
     {
         public Customer()
         {
-            Rents = new HashSet<Rent>();
+            Rents = new List<Rent>();
         }
 
         public int CustomerId { get; set; }
@@ -18,7 +18,7 @@ namespace CarSharing.Models
         public string Address { get; set; }
         public DateTime? BirthDate { get; set; }
         public string PassportInfo { get; set; }
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
 
         public virtual ICollection<Rent> Rents { get; set; }
     }

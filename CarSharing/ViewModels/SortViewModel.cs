@@ -11,7 +11,7 @@ namespace CarSharing.ViewModels
         //CarMark
         CarMarkNameAsc,
         CarMarkNameDesc,
-        //Employees
+        //employees
         EmployeesPostAsc,
         EmployeesNameAsc,
         EmployeesSurnameAsc,
@@ -48,14 +48,60 @@ namespace CarSharing.ViewModels
         CarsSpecsDesc,
         CarsTechnicalMaintenanceDateDesc,
         CarsSpecMarkDesc,
-        CarsReturnMarkDesc
+        CarsReturnMarkDesc,
+        //Services
+        ServicesNameAsc,
+        ServicesNameDesc,
+        ServicesPriceAsc,
+        ServicesPriceDesc,
+        ServicesDescriptionAsc,
+        ServicesDescriptionDesc,
+        //Customers
+        CustomersNameAsc,
+        CustomersSurnameAsc,
+        CustomersPatronymicAsc,
+        CustomersPhoneNumAsc,
+        CustomersAddressAsc,
+        CustomersBirthDateAsc,
+        CustomersPassportInfoAsc,
+        CustomersGenderAsc,
+
+        CustomersNameDesc,
+        CustomersSurnameDesc,
+        CustomersPatronymicDesc,
+        CustomersPhoneNumDesc,
+        CustomersAddressDesc,
+        CustomersBirthDateDesc,
+        CustomersPassportInfoDesc,
+        CustomersGenderDesc,
+        //AdditionalServices
+        AdditionalServiceServiceNameAsc,
+        AdditionalServiceServiceNameDesc,
+        AdditionalServiceRentIdAsc,
+        AdditionalServiceRentIdDesc,
+        //Rents
+        RentReturnDateAsc,
+        RentReturnDateDesc,
+        RentDeliveryDateAsc,
+        RentDeliveryDateDesc,
+        RentPriceAsc,
+        RentPriceDesc
+        
     }
 
     public class SortViewModel
     {
+        //Rents
+        public SortState RentReturnDateSort { get; set; }
+        public SortState RentDeliveryDateSort { get; set; }
+        public SortState RentPriceSort { get; set; }
+        //AdditionalServices
+        public SortState AdditionalServiceServiceNameSort { get; set; }
+        public SortState AdditionalServiceRentIdSort { get; set; }
+
         //CarMark
         public SortState CarMarkNameSort { get; set; }
-        //Employees
+        //employees
         public SortState EmployeesPostSort { get; set; }
         public SortState EmployeesNameSort { get; set; }
         public SortState EmployeesSurnameSort { get; set; }
@@ -65,25 +111,86 @@ namespace CarSharing.ViewModels
         public SortState CarModelsNameSort { get; set; }
         public SortState CarModelsDescriptionSort { get; set; }
         //Cars
-        public SortState CarsRegNum { get; set; }
-        public SortState CarsVINcode { get; set; }
-        public SortState CarsEngineNum { get; set; }
-        public SortState CarsPrice { get; set; }
-        public SortState CarsRentalPrice { get; set; }
-        public SortState CarsIssueDate { get; set; }
-        public SortState CarsSpecs { get; set; }
-        public SortState CarsTechnicalMaintenanceDate { get; set; }
-        public SortState CarsSpecMark { get; set; }
-        public SortState CarsReturnMark { get; set; }
+        public SortState CarsRegNumSort { get; set; }
+        public SortState CarsVINcodeSort { get; set; }
+        public SortState CarsEngineNumSort { get; set; }
+        public SortState CarsPriceSort { get; set; }
+        public SortState CarsRentalPriceSort { get; set; }
+        public SortState CarsIssueDateSort { get; set; }
+        public SortState CarsSpecsSort { get; set; }
+        public SortState CarsTechnicalMaintenanceDateSort { get; set; }
+        public SortState CarsSpecMarkSort { get; set; }
+        public SortState CarsReturnMarkSort { get; set; }
+
+        //Services
+        public SortState ServicesNameSort { get; set; }
+        public SortState ServicesPriceSort { get; set; }
+        public SortState ServicesDescriptionSort { get; set; }
+
+        //Customers
+        public SortState CustomersNameSort { get; set; }
+        public SortState CustomersSurnameSort { get; set; }
+        public SortState CustomersPatronymicSort { get; set; }
+        public SortState CustomersPhoneNumSort { get; set; }
+        public SortState CustomersAddressSort { get; set; }
+        public SortState CustomersBirthDateSort { get; set; }
+        public SortState CustomersPassportInfoSort { get; set; }
+        public SortState CustomersGenderSort { get; set; }
 
 
         public SortState CurrentState { get; set; }
         public SortViewModel(SortState state)
         {
+            //Rents
+            RentReturnDateSort = state == SortState.RentReturnDateAsc ? SortState.RentReturnDateDesc : SortState.RentReturnDateAsc;
+            CurrentState = state;
+           
+            RentDeliveryDateSort = state == SortState.RentDeliveryDateAsc ? SortState.RentDeliveryDateDesc : SortState.RentDeliveryDateAsc;
+            CurrentState = state;
+            
+            RentPriceSort = state == SortState.RentPriceAsc ? SortState.RentPriceDesc : SortState.RentPriceAsc;
+            CurrentState = state;
+
+            //AdditionalServices
+            AdditionalServiceRentIdSort = state == SortState.AdditionalServiceRentIdAsc ? SortState.AdditionalServiceRentIdDesc : SortState.AdditionalServiceRentIdAsc;
+            CurrentState = state;
+            AdditionalServiceServiceNameSort = state == SortState.AdditionalServiceServiceNameAsc ? SortState.AdditionalServiceServiceNameDesc : SortState.AdditionalServiceServiceNameAsc;
+            CurrentState = state;
+
+
+            //Customers
+            CustomersNameSort = state == SortState.CustomersNameAsc ? SortState.CustomersNameDesc : SortState.CustomersNameAsc;
+            CurrentState = state;
+            CustomersSurnameSort = state == SortState.CustomersSurnameAsc ? SortState.CustomersSurnameDesc : SortState.CustomersSurnameAsc;
+            CurrentState = state;
+            CustomersPatronymicSort = state == SortState.CustomersPatronymicAsc ? SortState.CustomersPatronymicDesc : SortState.CustomersPatronymicAsc;
+            CurrentState = state;
+            CustomersPhoneNumSort = state == SortState.CustomersPhoneNumAsc ? SortState.CustomersPhoneNumDesc : SortState.CustomersPhoneNumAsc;
+            CurrentState = state;
+            CustomersAddressSort = state == SortState.CustomersAddressAsc ? SortState.CustomersAddressDesc : SortState.CustomersAddressAsc;
+            CurrentState = state;
+            CustomersBirthDateSort = state == SortState.CustomersBirthDateAsc ? SortState.CustomersBirthDateDesc : SortState.CustomersBirthDateAsc;
+            CurrentState = state;
+            CustomersPassportInfoSort = state == SortState.CustomersPassportInfoAsc ? SortState.CustomersPassportInfoDesc : SortState.CustomersPassportInfoAsc;
+            CurrentState = state;
+            CustomersGenderSort = state == SortState.CustomersGenderAsc ? SortState.CustomersGenderDesc : SortState.CustomersGenderAsc;
+            CurrentState = state;
+
+
+            //Service
+            ServicesNameSort = state == SortState.ServicesNameAsc ? SortState.ServicesNameDesc : SortState.ServicesNameAsc;
+            CurrentState = state;
+            ServicesPriceSort = state == SortState.ServicesPriceAsc ? SortState.ServicesPriceDesc : SortState.ServicesPriceAsc;
+            CurrentState = state;
+            ServicesDescriptionSort = state == SortState.ServicesDescriptionAsc ? SortState.ServicesDescriptionDesc : SortState.ServicesDescriptionAsc;
+            CurrentState = state;
+
+
+
             //CarMark
             CarMarkNameSort = state == SortState.CarMarkNameAsc ? SortState.CarMarkNameDesc : SortState.CarMarkNameAsc;
             CurrentState = state;
-            //Employees
+            //employees
             EmployeesPostSort = state == SortState.EmployeesPostAsc ? SortState.EmployeesPostDesc : SortState.EmployeesPostAsc;
             CurrentState = state;
 
@@ -106,34 +213,34 @@ namespace CarSharing.ViewModels
             CurrentState = state;
             //Cars
 
-            CarsRegNum = state == SortState.CarsRegNumAsc ? SortState.CarsRegNumDesc : SortState.CarsRegNumAsc;
+            CarsRegNumSort = state == SortState.CarsRegNumAsc ? SortState.CarsRegNumDesc : SortState.CarsRegNumAsc;
             CurrentState = state;
 
-            CarsVINcode = state == SortState.CarsVINcodeAsc ? SortState.CarsVINcodeDesc : SortState.CarsVINcodeAsc;
+            CarsVINcodeSort = state == SortState.CarsVINcodeAsc ? SortState.CarsVINcodeDesc : SortState.CarsVINcodeAsc;
             CurrentState = state;
 
-            CarsEngineNum = state == SortState.CarsEngineNumAsc ? SortState.CarsEngineNumDesc : SortState.CarsEngineNumAsc;
+            CarsEngineNumSort = state == SortState.CarsEngineNumAsc ? SortState.CarsEngineNumDesc : SortState.CarsEngineNumAsc;
             CurrentState = state;
 
-            CarsPrice = state == SortState.CarsPriceAsc ? SortState.CarsPriceDesc : SortState.CarsPriceAsc;
+            CarsPriceSort = state == SortState.CarsPriceAsc ? SortState.CarsPriceDesc : SortState.CarsPriceAsc;
             CurrentState = state;
 
-            CarsRentalPrice = state == SortState.CarsRentalPriceAsc ? SortState.CarsRentalPriceDesc : SortState.CarsRentalPriceAsc;
+            CarsRentalPriceSort = state == SortState.CarsRentalPriceAsc ? SortState.CarsRentalPriceDesc : SortState.CarsRentalPriceAsc;
             CurrentState = state;
 
-            CarsIssueDate = state == SortState.CarsIssueDateAsc ? SortState.CarsIssueDateDesc : SortState.CarsIssueDateAsc;
+            CarsIssueDateSort = state == SortState.CarsIssueDateAsc ? SortState.CarsIssueDateDesc : SortState.CarsIssueDateAsc;
             CurrentState = state;
 
-            CarsSpecs = state == SortState.CarsSpecsAsc ? SortState.CarsSpecsDesc : SortState.CarsSpecsAsc;
+            CarsSpecsSort = state == SortState.CarsSpecsAsc ? SortState.CarsSpecsDesc : SortState.CarsSpecsAsc;
             CurrentState = state;
 
-            CarsTechnicalMaintenanceDate = state == SortState.CarsTechnicalMaintenanceDateAsc ? SortState.CarsTechnicalMaintenanceDateDesc : SortState.CarsTechnicalMaintenanceDateAsc;
+            CarsTechnicalMaintenanceDateSort = state == SortState.CarsTechnicalMaintenanceDateAsc ? SortState.CarsTechnicalMaintenanceDateDesc : SortState.CarsTechnicalMaintenanceDateAsc;
             CurrentState = state;
 
-            CarsSpecMark = state == SortState.CarsSpecMarkAsc ? SortState.CarsSpecMarkDesc : SortState.CarsSpecMarkAsc;
+            CarsSpecMarkSort = state == SortState.CarsSpecMarkAsc ? SortState.CarsSpecMarkDesc : SortState.CarsSpecMarkAsc;
             CurrentState = state;
 
-            CarsReturnMark = state == SortState.CarsReturnMarkAsc ? SortState.CarsReturnMarkDesc : SortState.CarsReturnMarkAsc;
+            CarsReturnMarkSort = state == SortState.CarsReturnMarkAsc ? SortState.CarsReturnMarkDesc : SortState.CarsReturnMarkAsc;
             CurrentState = state;
         }
     }

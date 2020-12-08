@@ -9,6 +9,7 @@
             <input hidden asp-for="PageViewModel.CurrentPage" value="@Model.PageViewModel.CurrentPage" />
             <input hidden asp-for="Entity.CarModelId" value="@Model.Entity.CarModelId" />
             <input hidden asp-for="Entity.EmployeeId" value="@Model.Entity.EmployeeId" />
+            <input hidden asp-for="Entity.CarId" value="@Model.Entity.CarId" />
         </div>
 
         <h2>Edit entity</h2>
@@ -27,12 +28,12 @@
 
         <p>
             <label asp-for="Entity.Price"></label><br />
-            <input asp-for="Entity.Price" type="number" class="w-75" />
+            <input asp-for="Entity.Price" type="number" min="1" step="any" class="w-75" />
         <p><span asp-validation-for="Entity.Price" class="text-danger"></span></p>
 
         <p>
             <label asp-for="Entity.RentalPrice"></label><br />
-            <input asp-for="Entity.RentalPrice" type="number" class="w-75" />
+            <input asp-for="Entity.RentalPrice" type="number" min="1" step="any" class="w-75" />
         <p><span asp-validation-for="Entity.RentalPrice" class="text-danger"></span></p>
 
         <p>
@@ -73,8 +74,8 @@
 
         <p>
             <label asp-for="Entity.EmployeeId"></label><br />
-            <input type="search" list="employees" asp-for="EmplpoyeeName" class="w-75" />
-            <datalist id="employees">
+            <input type="search" list="customers" asp-for="EmplpoyeeName" class="w-75" />
+            <datalist id="customers">
                 @foreach (var item in Model.SelectList2)
                 {
                     <option value="@item.Name"></option>
