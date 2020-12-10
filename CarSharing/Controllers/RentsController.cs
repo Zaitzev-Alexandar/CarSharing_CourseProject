@@ -17,6 +17,7 @@ using System;
 
 namespace CarSharing.Controllers
 {
+    [Authorize]
     public class RentsController : Controller
     {
         private readonly car_sharingContext db;
@@ -77,7 +78,7 @@ namespace CarSharing.Controllers
             return RedirectToAction("Index", new { page });
         }
 
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         {
             RentViewModel model = new RentViewModel
@@ -93,6 +94,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(RentViewModel model)
         {
             model.CarSelectList = db.Cars.ToList();
@@ -119,7 +121,7 @@ namespace CarSharing.Controllers
                 return View(model);
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid & CheckUniqueValues(car, model.Entity))
             {
                 model.Entity.CarId = car.CarId;
                 model.Entity.EmployeeId = employee.EmployeeId;
@@ -135,7 +137,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             Rent rent = await db.Rents.FindAsync(id);
@@ -159,6 +161,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(RentViewModel model)
         {
             model.CarSelectList = db.Cars.ToList();
@@ -188,7 +191,7 @@ namespace CarSharing.Controllers
             if (ModelState.IsValid)
             {
                 Rent rent = await db.Rents.FindAsync(model.Entity.CarId);
-                if (rent != null)
+                if (rent != null && CheckUniqueValues(car, rent, model.Entity) == true)
                 {
                     rent.CarId = model.Entity.CarId;
                     rent.CustomerId = model.Entity.CustomerId;
@@ -213,8 +216,75 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
+        private bool CheckUniqueValues(Car car, Rent rent)
+        {
+            bool firstFlag = true;
+            bool secondFlag = true;
+            if(rent.ReturnDate < rent.DeliveryDate)
+            {
+                firstFlag = false;
+                ModelState.AddModelError(string.Empty, "Return date can't be less than delivery date.Change dates to anothers");
+            }
+            //Список аренд которые имеют дату возврата меньше чем дату отправки новой аренды
+            List<Rent> carRents = db.Rents.Where(g => g.CarId == car.CarId).ToList() ;
+            foreach(Rent carRent in carRents)
+            {
+                if(CheckRentCross(rent, carRent) == true)
+                {
+                    secondFlag = false;
+                    ModelState.AddModelError(string.Empty, "Select car is already in another rent.Change dates of cars");
+                    break;
+                }
+            }
+                    //ModelState.AddModelError(string.Empty, "Another entity have this name. Please replace this to another.");
+  
+            if (firstFlag == true && secondFlag == true)
+                return true;
+            else
+                return false;
+        }
+        private bool CheckUniqueValues(Car car, Rent oldRent, Rent newRent)
+        {
+            bool firstFlag = true;
+            bool secondFlag = true;
+            if (newRent.ReturnDate < newRent.DeliveryDate)
+            {
+                firstFlag = false;
+                ModelState.AddModelError(string.Empty, "Return date can't be less than delivery date.Change dates to anothers");
+            }
+            //Список аренд которые имеют дату возврата меньше чем дату отправки новой аренды
+            List<Rent> carRents = db.Rents.Where(g => g.CarId == car.CarId).ToList();
+            foreach (Rent carRent in carRents)
+            {
+                if (CheckRentCross(newRent, carRent) == true && carRent!= oldRent)
+                {
+                    secondFlag = false;
+                    ModelState.AddModelError(string.Empty, "Select car is already in another rent.Change dates of cars");
+                    break;
+                }
+            }
+            //ModelState.AddModelError(string.Empty, "Another entity have this name. Please replace this to another.");
 
-
+            if (firstFlag == true && secondFlag == true)
+                return true;
+            else
+                return false;
+        }
+        private bool CheckRentCross(Rent rent1, Rent rent2)
+        {
+            bool result = true;
+            //if((rent1.DeliveryDate > rent2.ReturnDate) || (rent1.ReturnDate < rent2.DeliveryDate))
+            if(rent1.DeliveryDate > rent2.ReturnDate)
+            { result = false; }
+            else
+            { result = true; }
+            if(result == true)
+            {
+                if(rent1.ReturnDate < rent2.DeliveryDate) { result = false; }
+                else { result = true; }
+            }
+            return result;
+        }
 
 
 

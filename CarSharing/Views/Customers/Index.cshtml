@@ -110,10 +110,13 @@
                         <span>"Female"</span>
                     }
                 </td>
-                <td class="text-center">
-                    <a asp-action="Edit" asp-route-id="@entity.CustomerId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@entity.CustomerId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
-                </td>
+                @if (User.IsInRole("admin"))
+                {
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@entity.CustomerId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@entity.CustomerId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                    </td>
+                }
             </tr>
             }
         </tbody>

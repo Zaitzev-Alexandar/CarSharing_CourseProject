@@ -85,6 +85,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(CarMarkViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -99,7 +100,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             CarMark carMark = await db.CarMarks.FindAsync(id);
@@ -116,6 +117,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(CarMarkViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -140,7 +142,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             CarMark carMark = await db.CarMarks.FindAsync(id);
@@ -162,6 +164,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+            [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(CarMarkViewModel model)
         {
             CarMark carMark = await db.CarMarks.FindAsync(model.Entity.CarMarkId);

@@ -18,6 +18,7 @@ using CarSharing.ViewModels.Filters;
 
 namespace CarSharing.Controllers
 {
+    [Authorize]
     public class AdditionalServicesController : Controller
     {
         private readonly car_sharingContext db;
@@ -60,13 +61,13 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(AdditionalServiceViewModel filterModel, int page)
+        public IActionResult Index(AdditionalServicesFilterViewModel filterModel, int page)
         {
             AdditionalServicesFilterViewModel filter = HttpContext.Session.Get<AdditionalServicesFilterViewModel>(filterKey);
             if (filter != null)
             {
-                filter.AdditionalServiceRentId = filterModel.RentId;
-                filter.AdditionalServiceServiceName = filterModel.ServiceName;
+                filter.AdditionalServiceRentId = filterModel.AdditionalServiceRentId;
+                filter.AdditionalServiceServiceName = filterModel.AdditionalServiceServiceName;
 
 
                 HttpContext.Session.Remove(filterKey);
@@ -77,7 +78,7 @@ namespace CarSharing.Controllers
         }
 
 
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         {
             AdditionalServiceViewModel model = new AdditionalServiceViewModel
@@ -91,8 +92,10 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(AdditionalServiceViewModel model)
         {
+            AdditionalService temp = new AdditionalService();
             model.RentSelectList = db.Rents.ToList();
             model.ServiceSelectList = db.Services.ToList();
 
@@ -108,12 +111,12 @@ namespace CarSharing.Controllers
                 ModelState.AddModelError(string.Empty, "Please select service from list.");
                 return View(model);
             }
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
-                model.Entity.RentId = rent.RentId;
-                model.Entity.ServiceId = service.ServiceId;
+                temp.RentId = rent.RentId;
+                temp.ServiceId = service.ServiceId;
 
-                await db.AdditionalServices.AddAsync(model.Entity);
+                await db.AdditionalServices.AddAsync(temp);
                 await db.SaveChangesAsync();
 
                 cache.Clean();
@@ -123,7 +126,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             AdditionalService additionalService = await db.AdditionalServices.FindAsync(id);
@@ -143,9 +146,11 @@ namespace CarSharing.Controllers
 
             return NotFound();
         }
-
+        [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(AdditionalServiceViewModel model)
         {
+
             model.RentSelectList = db.Rents.ToList();
             model.ServiceSelectList = db.Services.ToList();
 
@@ -162,14 +167,14 @@ namespace CarSharing.Controllers
                 return View(model);
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid & CheckUniqueValues(model.Entity))
             {
-                AdditionalService additionalService = await db.AdditionalServices.FindAsync(model.Entity.Id);
+                AdditionalService additionalService = await db.AdditionalServices.FindAsync(model.Entity.AdditionalServiceId);
                 if (additionalService != null)
                 {
 
-                    additionalService.RentId = model.Entity.RentId;
-                    additionalService.ServiceId = model.Entity.ServiceId;
+                    additionalService.RentId = rent.RentId;
+                    additionalService.ServiceId = service.ServiceId;
 
                     db.AdditionalServices.Update(additionalService);
                     await db.SaveChangesAsync();
@@ -187,7 +192,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             AdditionalService additionalService = await db.AdditionalServices.FindAsync(id);
@@ -206,9 +211,10 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(AdditionalServiceViewModel model)
         {
-            AdditionalService additionalService = await db.AdditionalServices.FindAsync(model.Entity.Id);
+            AdditionalService additionalService = await db.AdditionalServices.FindAsync(model.Entity.AdditionalServiceId);
             if (additionalService == null)
                 return NotFound();
 
@@ -257,7 +263,24 @@ namespace CarSharing.Controllers
 
             return additionalServices;
         }
+        private bool CheckUniqueValues(AdditionalService additionalService)
+        {
+            bool firstFlag = true;
 
+            AdditionalService tempAdditionalService = db.AdditionalServices.FirstOrDefault(g => g.AdditionalServiceId == additionalService.AdditionalServiceId);
+            if (tempAdditionalService != null)
+            {
+                if (tempAdditionalService.AdditionalServiceId != additionalService.AdditionalServiceId)
+                {
+                    ModelState.AddModelError(string.Empty, "Another entity have this name. Please replace this to another.");
+                    firstFlag = false;
+                }
+            }
+            if (firstFlag)
+                return true;
+            else
+                return false;
+        }
 
     }
 }

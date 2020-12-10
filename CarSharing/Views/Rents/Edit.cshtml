@@ -39,7 +39,7 @@
 
 
         <p>
-            <label asp-for="Entity.CarId"></label><br />
+            <label asp-for="Entity.Car.VINcode"></label><br />
             <input type="search" list="cars" asp-for="CarVINcode" class="w-75" />
             <datalist id="cars">
                 @foreach (var item in Model.CarSelectList)
@@ -50,7 +50,7 @@
         <p><span asp-validation-for="Entity.CarId" class="text-danger"></span></p>
 
         <p>
-            <label asp-for="Entity.EmployeeId"></label><br />
+            <label asp-for="Entity.Employee.Name"></label><br />
             <input type="search" list="employees" asp-for="EmplpoyeeName" class="w-75" />
             <datalist id="employees">
                 @foreach (var item in Model.EmployeeSelectList)
@@ -61,7 +61,7 @@
         <p><span asp-validation-for="Entity.EmployeeId" class="text-danger"></span></p>
 
         <p>
-            <label asp-for="Entity.CustomerId"></label><br />
+            <label asp-for="Entity.Customer.Name"></label><br />
             <input type="search" list="customers" asp-for="CustomerName" class="w-75" />
             <datalist id="customers">
                 @foreach (var item in Model.CustomerSelectList)

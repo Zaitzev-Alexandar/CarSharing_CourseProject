@@ -46,10 +46,14 @@
                 <tr>
                     <td>@entity.Name</td>
                     <td>@entity.CarMark.Name</td>
+                    
                     <td class="text-center">
                         <a asp-action="Details" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Details</a>
-                        <a asp-action="Edit" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@entity.CarModelId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                        }
                     </td>
                 </tr>
             }

@@ -1,5 +1,4 @@
 ﻿@model CarSharing.ViewModels.Entities.AdditionalServiceViewModel
-
 @{
     ViewData["Title"] = "Create";
 }
@@ -23,10 +22,10 @@
                     <option value="@item.RentId"></option>
                 }
             </datalist>
-        <p><span asp-validation-for="Entity.ServiceId" class="text-danger"></span></p>
+        <p><span asp-validation-for="Entity.RentId" class="text-danger"></span></p>
 
         <p>
-            <label asp-for="Entity.ServiceId"></label><br />
+            <label asp-for="Entity.Service.Name"></label><br />
             <input type="search" list="services" asp-for="ServiceName" class="w-75" />
             <datalist id="services">
                 @foreach (var item in Model.ServiceSelectList)

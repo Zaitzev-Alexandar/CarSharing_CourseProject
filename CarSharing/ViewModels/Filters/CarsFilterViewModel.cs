@@ -19,5 +19,8 @@ namespace CarSharing.ViewModels.Filters
         public bool CarSpecMark { get; set; } = default!;
         public bool CarReturnMark { get; set; } = default!;
 
+        public DateTime RentDeliveryDate { get; set; } = default!;
+        public DateTime RentReturnDate { get; set; } = default!;
+        public bool AdditionalRentCount { get; set; } = default!;
     }
 }

@@ -12,6 +12,7 @@
             <input hidden asp-for="Entity.CarId" value="@Model.Entity.CarId" />
         </div>
 
+
         <h2>Edit entity</h2>
 
         <div asp-validation-summary="ModelOnly" class="text-danger text-justify w-100 m-lg-0"></div>
@@ -20,6 +21,10 @@
             <label asp-for="Entity.VINcode"></label><br />
             <input asp-for="Entity.VINcode" class="w-75" />
         <p><span asp-validation-for="Entity.VINcode" class="text-danger"></span></p>
+        <p>
+            <label asp-for="Entity.RegNum"></label><br />
+            <input asp-for="Entity.RegNum" class="w-75" />
+        <p><span asp-validation-for="Entity.RegNum" class="text-danger"></span></p>
 
         <p>
             <label asp-for="Entity.EngineNum"></label><br />
@@ -62,7 +67,7 @@
         <p><span asp-validation-for="Entity.ReturnMark" class="text-danger"></span></p>
 
         <p>
-            <label asp-for="Entity.CarModelId"></label><br />
+            <label asp-for="Entity.CarModel.Name"></label><br />
             <input type="search" list="carModels" asp-for="CarModelName" class="w-75" />
             <datalist id="carModels">
                 @foreach (var item in Model.SelectList1)
@@ -73,7 +78,7 @@
         <p><span asp-validation-for="Entity.CarModelId" class="text-danger"></span></p>
 
         <p>
-            <label asp-for="Entity.EmployeeId"></label><br />
+            <label asp-for="Entity.Employee.Name"></label><br />
             <input type="search" list="customers" asp-for="EmplpoyeeName" class="w-75" />
             <datalist id="customers">
                 @foreach (var item in Model.SelectList2)

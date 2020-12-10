@@ -17,7 +17,7 @@
                 <input name="CarEngineNum" value="@Model.CarsFilterViewModel.CarEngineNum" type="number" />
 
                 <label asp-for="CarsFilterViewModel.CarIssueDate"></label>
-                <input name="CarIssueDate" value="@Model.CarsFilterViewModel.CarIssueDate" type="datetime" />
+                <input name="CarIssueDate" value="@Model.CarsFilterViewModel.CarIssueDate" type="date" />
 
                 <label asp-for="CarsFilterViewModel.CarPrice"></label>
                 <input name="CarPrice" value="@Model.CarsFilterViewModel.CarPrice" type="number" />
@@ -30,6 +30,26 @@
 
                 <label asp-for="CarsFilterViewModel.CarVINcode"></label>
                 <input name="CarVINcode" value="@Model.CarsFilterViewModel.CarVINcode" />
+
+                <label asp-for="CarsFilterViewModel.CarReturnMark"></label>
+
+                <select name="CarReturnMark" asp-for="CarsFilterViewModel.CarReturnMark" class="w-25">
+                    <option value="true">Avaible</option>
+                    <option value="false">In rent</option>
+                </select>
+
+                <label asp-for="CarsFilterViewModel.RentDeliveryDate"></label>
+                <input name="RentDeliveryDate" value="@Model.CarsFilterViewModel.RentDeliveryDate" type="date" />
+
+                <label asp-for="CarsFilterViewModel.RentReturnDate"></label>
+                <input name="RentReturnDate" value="@Model.CarsFilterViewModel.RentReturnDate" type="date" />
+
+                <label asp-for="CarsFilterViewModel.AdditionalRentCount"></label>
+                <select name="AdditionalRentCount" asp-for="CarsFilterViewModel.AdditionalRentCount" class="w-25">
+                    <option value="true">More than 2 services</option>
+                    <option value="false">Default</option>
+                </select>
+
 
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </form>
@@ -65,7 +85,7 @@
                     </a>
                 </th>
                 <th class="w-25">
-                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.CarsReturnMarkSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                    <a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
                         @Html.DisplayNameFor(e => e.Entity.ReturnMark)
                     </a>
                 </th>
@@ -111,8 +131,11 @@
                     <td>@entity.Employee.Name</td>
                     <td class="text-center">
                         <a asp-action="Details" asp-route-id="@entity.CarId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Details</a>
-                        <a asp-action="Edit" asp-route-id="@entity.CarId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.CarId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@entity.CarId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@entity.CarId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                        }
                     </td>
                 </tr>
             }

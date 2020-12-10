@@ -36,16 +36,16 @@ namespace CarSharing.Controllers
             CarsFilterViewModel filter = HttpContext.Session.Get<CarsFilterViewModel>(filterKey);
             if (filter == null)
             {
-                filter = new CarsFilterViewModel { CarEngineNum = default, CarIssueDate = default, CarPrice = default, CarRegNum = default, CarRentalPrice = default, CarVINcode = string.Empty };
+                filter = new CarsFilterViewModel { CarEngineNum = default, CarIssueDate = default, CarPrice = default, CarRegNum = default, CarRentalPrice = default, CarVINcode = string.Empty, CarReturnMark = default, RentDeliveryDate = default, RentReturnDate = default, AdditionalRentCount = default };
                 HttpContext.Session.Set(filterKey, filter);
             }
 
-            string modelKey = $"{typeof(Car).Name}-{page}-{sortState}-{filter.CarEngineNum}-{filter.CarIssueDate}-{filter.CarPrice}-{filter.CarRegNum}-{filter.CarRentalPrice}-{filter.CarVINcode}";
+            string modelKey = $"{typeof(Car).Name}-{page}-{sortState}-{filter.CarEngineNum}-{filter.CarIssueDate}-{filter.CarPrice}-{filter.CarRegNum}-{filter.CarRentalPrice}-{filter.CarVINcode}-{filter.CarReturnMark}-{filter.RentDeliveryDate}-{filter.RentReturnDate}-{filter.AdditionalRentCount}";
             if (!cache.TryGetValue(modelKey, out CarViewModel model))
             {
                 model = new CarViewModel();
 
-                IQueryable<Car> cars = GetSortedEntities(sortState, filter.CarVINcode, filter.CarEngineNum, filter.CarPrice, filter.CarRentalPrice, filter.CarIssueDate, filter.CarRegNum);
+                IQueryable<Car> cars = GetSortedEntities(sortState, filter.CarVINcode, filter.CarEngineNum, filter.CarPrice, filter.CarRentalPrice, filter.CarIssueDate, filter.CarRegNum, filter.CarReturnMark, filter.RentDeliveryDate, filter.RentReturnDate, filter.AdditionalRentCount);
 
                 int count = cars.Count();
                 int pageSize = 10;
@@ -75,6 +75,7 @@ namespace CarSharing.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult Index(CarsFilterViewModel filterModel, int page)
         {
             CarsFilterViewModel filter = HttpContext.Session.Get<CarsFilterViewModel>(filterKey);
@@ -86,6 +87,11 @@ namespace CarSharing.Controllers
                 filter.CarRegNum = filterModel.CarRegNum;
                 filter.CarRentalPrice = filterModel.CarRentalPrice;
                 filter.CarVINcode = filterModel.CarVINcode;
+                filter.CarReturnMark = filterModel.CarReturnMark;
+
+                filter.RentDeliveryDate = filterModel.RentDeliveryDate;
+                filter.RentReturnDate = filterModel.RentReturnDate;
+                filter.AdditionalRentCount = filterModel.AdditionalRentCount;
 
                 HttpContext.Session.Remove(filterKey);
                 HttpContext.Session.Set(filterKey, filter);
@@ -93,7 +99,7 @@ namespace CarSharing.Controllers
 
             return RedirectToAction("Index", new { page });
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         {
             CarViewModel model = new CarViewModel
@@ -107,6 +113,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(CarViewModel model)
         {
             model.SelectList1 = db.CarModels.ToList();
@@ -124,7 +131,7 @@ namespace CarSharing.Controllers
                 ModelState.AddModelError(string.Empty, "Please select employee from list.");
                 return View(model);
             }
-            if (ModelState.IsValid & CheckUniqueValues(model.Entity))
+            if (ModelState.IsValid)
             {
                 model.Entity.CarModelId = carModel.CarModelId;
                 model.Entity.EmployeeId = employee.EmployeeId;
@@ -138,7 +145,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             Car car = await db.Cars.FindAsync(id);
@@ -160,6 +167,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(CarViewModel model)
         {
             model.SelectList1 = db.CarModels.ToList();
@@ -212,7 +220,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             Car car = await db.Cars.FindAsync(id);
@@ -234,6 +242,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(CarViewModel model)
         {
             Car car = await db.Cars.FindAsync(model.Entity.CarId);
@@ -263,6 +272,7 @@ namespace CarSharing.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Another entity have this name. Please replace this to another.");
                     firstFlag = false;
+                    
                 }
             }
             if (firstFlag)
@@ -277,7 +287,11 @@ namespace CarSharing.Controllers
          decimal carPrice,
          decimal carRentalPrice,
          DateTime carIssueDate,
-         int carRegNum
+         int carRegNum,
+         bool carReturnMark,
+         DateTime rentDeliveryDate,
+         DateTime rentReturnDate,
+         bool additionalRentCount
         )
         {
             IQueryable<Car> cars = db.Cars.Include(g => g.CarModel).Include(c => c.Employee).AsQueryable();
@@ -325,7 +339,6 @@ namespace CarSharing.Controllers
                 case SortState.CarsRegNumDesc:
                     cars = cars.OrderByDescending(g => g.RegNum);
                     break;
-
             }
 
             if (!string.IsNullOrEmpty(carVINcode))
@@ -350,7 +363,19 @@ namespace CarSharing.Controllers
             {
                 cars = cars.Where(g => g.RentalPrice >= (carRentalPrice - 1) && g.RentalPrice <= (carRentalPrice + 1)).AsQueryable();
             }
-
+            if (rentDeliveryDate != default)
+            {
+                cars = cars.Join(db.Rents, c => c.CarId, r => r.CarId, (c, r) => new { c, r }).ToList().Where(f => f.r.DeliveryDate.Date == rentDeliveryDate.Date).Select(f => f.c).AsQueryable();
+            }
+            if (rentReturnDate != default)
+            {
+                cars = cars.Join(db.Rents, c => c.CarId, r => r.CarId, (c, r) => new { c, r }).ToList().Where(f => f.r.ReturnDate.Date == rentReturnDate.Date).Select(f => f.c).AsQueryable();
+            }
+            if (additionalRentCount)
+            {
+                cars = cars.Where(f => f.Rents.Count >= 3);
+            }
+            cars = cars.Where(g => g.ReturnMark == carReturnMark).AsQueryable();
             return cars;
         }
     }

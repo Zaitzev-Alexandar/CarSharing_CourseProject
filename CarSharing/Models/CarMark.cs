@@ -9,7 +9,7 @@ namespace CarSharing.Models
     public class CarMark
     {
         public int CarMarkId { get; set; }
-        [Display(Name = "CarMarkName")]
+        [Display(Name = "Car mark name")]
         public string Name { get; set; }
         public virtual ICollection<CarModel> CarModels { get; set; }
         public CarMark()

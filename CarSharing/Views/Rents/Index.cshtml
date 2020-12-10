@@ -48,7 +48,11 @@
                     </a>
                 </th>
 
-
+                <th class="w-25">
+                    <a asp-action="Index" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                        @Html.DisplayNameFor(e => e.Entity.TotalPrice)
+                    </a>
+                </th>
 
                 <th class="w-25">
                     <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.CarsVINcodeSort'" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
@@ -71,18 +75,22 @@
         <tbody>
             @foreach (var entity in Model.Entities)
             {
-                <tr>
-                    <td>@entity.DeliveryDate</td>
-                    <td>@entity.ReturnDate</td>
-                    <td>@entity.Price</td>
-                    <td>@entity.Car.VINcode</td>
-                    <td>@entity.Customer.Name</td>
-                    <td>@entity.Employee.Name</td>
+            <tr>
+                <td>@entity.DeliveryDate</td>
+                <td>@entity.ReturnDate</td>
+                <td>@entity.Price</td>
+                <td>@entity.TotalPrice</td>
+                <td>@entity.Car.VINcode</td>
+                <td>@entity.Customer.Name</td>
+                <td>@entity.Employee.Name</td>
+                @if (User.IsInRole("admin"))
+                {
                     <td class="text-center">
                         <a asp-action="Edit" asp-route-id="@entity.RentId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
                         <a asp-action="Delete" asp-route-id="@entity.RentId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
                     </td>
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>

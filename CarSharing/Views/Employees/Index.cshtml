@@ -27,6 +27,9 @@
                 <label asp-for="EmployeesFilterViewModel.EmployeePost"></label>
                 <input name="EmployeePost" value="@Model.EmployeesFilterViewModel.EmployeePost" />
 
+                <label asp-for="EmployeesFilterViewModel.EmployeeEmploymentDate"></label>
+                <input name="EmployeeEmploymentDate" value="@Model.EmployeesFilterViewModel.EmployeeEmploymentDate" />
+
 
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </form>
@@ -78,10 +81,13 @@
                 <td>@entity.Patronymic</td>
                 <td>@entity.Post</td>
                 <td>@entity.EmploymentDate</td>
-                <td class="text-center">
-                    <a asp-action="Edit" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
-                </td>
+                @if (User.IsInRole("admin"))
+                {
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@entity.EmployeeId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                    </td>
+                }
             </tr>
             }
         </tbody>

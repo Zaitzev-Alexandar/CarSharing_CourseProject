@@ -9,8 +9,9 @@ namespace CarSharing.Models
     public class CarModel
     {
         public int CarModelId { get; set; }
-        [Display(Name = "CarModelName")]
+        [Display(Name = "Car model name")]
         public string Name { get; set; }
+
         public string Description { get; set; }
         public int CarMarkId { get; set; }
         public CarMark CarMark { get; set; }

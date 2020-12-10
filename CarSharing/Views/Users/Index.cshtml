@@ -22,14 +22,17 @@
         <tbody>
             @foreach (var entity in Model.Entities)
             {
-                <tr>
-                    <td>@entity.UserName</td>
+            <tr>
+                <td>@entity.UserName</td>
+                @if (User.IsInRole("admin"))
+                {
                     <td class="text-center">
                         <a asp-action="Edit" asp-route-id="@entity.Id" class="btn btn-warning">Edit</a>
                         <a asp-action="ChangePassword" asp-route-id="@entity.Id" class="btn btn-warning">Change password</a>
                         <a asp-action="Delete" asp-route-id="@entity.Id" class="btn btn-danger">Delete</a>
                     </td>
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>

@@ -53,15 +53,18 @@
         <tbody>
             @foreach (var entity in Model.Entities)
             {
-                <tr>
-                    <td>@entity.Name</td>
-                    <td>@entity.Description</td>
-                    <td>@entity.Price</td>
+            <tr>
+                <td>@entity.Name</td>
+                <td>@entity.Description</td>
+                <td>@entity.Price</td>
+                @if (User.IsInRole("admin"))
+                {
                     <td class="text-center">
                         <a asp-action="Edit" asp-route-id="@entity.ServiceId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
                         <a asp-action="Delete" asp-route-id="@entity.ServiceId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
                     </td>
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>

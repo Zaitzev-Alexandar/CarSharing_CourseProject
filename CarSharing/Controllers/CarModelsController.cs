@@ -75,7 +75,7 @@ namespace Lab5_WebApp.Controllers
 
             return RedirectToAction("Index", new { page });
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         {
             CarModelViewModel model = new CarModelViewModel
@@ -88,6 +88,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(CarModelViewModel model)
         {
             model.SelectList = db.CarMarks.ToList();
@@ -110,7 +111,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             CarModel carModel = await db.CarModels.FindAsync(id);
@@ -130,6 +131,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(CarModelViewModel model)
         {
             model.SelectList = db.CarMarks.ToList();
@@ -166,6 +168,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
+
         public async Task<IActionResult> Details(int id, int page)
         {
             CarModel carModel = await db.CarModels.Include(s => s.CarMark).FirstOrDefaultAsync(s => s.CarModelId == id);
@@ -178,7 +181,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             CarModel carModel = await db.CarModels.FindAsync(id);
@@ -200,6 +203,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(CarModelViewModel model)
         {
             CarModel carModel = await db.CarModels.FindAsync(model.Entity.CarModelId);

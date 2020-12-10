@@ -84,7 +84,7 @@ namespace CarSharing.Controllers
 
             return RedirectToAction("Index", new { page });
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         { 
             CustomerViewModel model = new CustomerViewModel
@@ -96,6 +96,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(CustomerViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -110,7 +111,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             Customer customer = await db.Customers.FindAsync(id);
@@ -127,6 +128,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(CustomerViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -158,7 +160,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             Customer customer = await db.Customers.FindAsync(id);
@@ -180,6 +182,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(CustomerViewModel model)
         {
             Customer customer = await db.Customers.FindAsync(model.Entity.CustomerId);

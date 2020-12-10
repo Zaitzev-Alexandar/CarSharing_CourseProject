@@ -29,12 +29,12 @@
         <thead class="thead-dark text-center text-white">
             <tr>
                 <th class="w-25">
-                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.AdditionalServiceRentIdSort'" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.AdditionalServiceRentIdSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
                         @Html.DisplayNameFor(e => e.Entity.Rent.RentId)
                     </a>
                 </th>
                 <th class="w-25">
-                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.AdditionalServiceServiceNameSort'" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
+                    <a asp-action="Index" asp-route-sortState="@Model.SortViewModel.AdditionalServiceServiceNameSort" asp-route-page="@Model.PageViewModel.CurrentPage" class="nav-link text-white">
                         @Html.DisplayNameFor(e => e.Entity.Service.Name)
                     </a>
                 </th>
@@ -44,15 +44,18 @@
         <tbody>
             @foreach (var entity in Model.Entities)
             {
-                <tr>
-                    <td>@entity.Rent.RentId</td>
-                    <td>@entity.Service.Name</td>
+            <tr>
+                <td>@entity.Rent.RentId</td>
+                <td>@entity.Service.Name</td>
+                @if (User.IsInRole("admin"))
+                {
                     <td class="text-center">
-                       
-                        <a asp-action="Edit" asp-route-id="@entity.Id" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.Id" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+
+                        <a asp-action="Edit" asp-route-id="@entity.AdditionalServiceId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@entity.AdditionalServiceId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
                     </td>
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>

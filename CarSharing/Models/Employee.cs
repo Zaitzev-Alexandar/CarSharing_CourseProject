@@ -10,9 +10,11 @@ namespace CarSharing.Models
     {
         public int EmployeeId { get; set; }
         public string Post { get; set; }
+        [Display(Name = "Employee name")]
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
+        [Display(Name = "Employment date")]
         public DateTime EmploymentDate { get; set; }
         public virtual ICollection<Car> Cars { get; set; }
         public virtual ICollection<Rent> Rents { get; set; }

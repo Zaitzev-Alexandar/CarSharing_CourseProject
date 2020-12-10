@@ -36,12 +36,15 @@
         <tbody>
             @foreach (var entity in Model.Entities)
             {
-                <tr>
-                    <td>@entity.Name</td>
-                    <td class="text-center">
-                        <a asp-action="Edit" asp-route-id="@entity.CarMarkId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@entity.CarMarkId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
-                    </td>
+            <tr>
+                <td>@entity.Name</td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@entity.CarMarkId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@entity.CarMarkId" asp-route-sortState="@Model.SortViewModel.CurrentState" asp-route-page="@Model.PageViewModel.CurrentPage" class="btn btn-danger">Delete</a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

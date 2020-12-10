@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,16 +35,16 @@ namespace CarSharing.Controllers
             EmployeesFilterViewModel filter = HttpContext.Session.Get<EmployeesFilterViewModel>(filterKey);
             if (filter == null)
             {
-                filter = new EmployeesFilterViewModel { EmployeeName = string.Empty, EmployeeSurname = string.Empty, EmployeePatronymic = string.Empty, EmployeePost = string.Empty };
+                filter = new EmployeesFilterViewModel { EmployeeName = string.Empty, EmployeeSurname = string.Empty, EmployeePatronymic = string.Empty, EmployeePost = string.Empty, EmployeeEmploymentDate = default };
                 HttpContext.Session.Set(filterKey, filter);
             }
 
-            string modelKey = $"{typeof(Employee).Name}-{page}-{sortState}-{filter.EmployeeName}-{filter.EmployeeSurname} -{filter.EmployeePatronymic}-{filter.EmployeePost}";
+            string modelKey = $"{typeof(Employee).Name}-{page}-{sortState}-{filter.EmployeeName}-{filter.EmployeeSurname} -{filter.EmployeePatronymic}-{filter.EmployeePost}-{filter.EmployeeEmploymentDate}";
             if (!cache.TryGetValue(modelKey, out EmployeeViewModel model))
             {
                 model = new EmployeeViewModel();
 
-                IQueryable<Employee> employees = GetSortedEntities(sortState, filter.EmployeePost, filter.EmployeeName, filter.EmployeeSurname, filter.EmployeePatronymic);
+                IQueryable<Employee> employees = GetSortedEntities(sortState, filter.EmployeePost, filter.EmployeeName, filter.EmployeeSurname, filter.EmployeePatronymic, filter.EmployeeEmploymentDate);
 
                 int count = employees.Count();
                 int pageSize = 10;
@@ -70,6 +71,7 @@ namespace CarSharing.Controllers
 
                 filter.EmployeeSurname = filterModel.EmployeeSurname;
                 filter.EmployeePatronymic = filterModel.EmployeePatronymic;
+                filter.EmployeeEmploymentDate = filterModel.EmployeeEmploymentDate;
 
                 HttpContext.Session.Remove(filterKey);
                 HttpContext.Session.Set(filterKey, filter);
@@ -77,7 +79,7 @@ namespace CarSharing.Controllers
 
             return RedirectToAction("Index", new { page });
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         {
             EmployeeViewModel model = new EmployeeViewModel
@@ -89,6 +91,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(EmployeeViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -103,7 +106,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             Employee employee = await db.Employees.FindAsync(id);
@@ -120,6 +123,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(EmployeeViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -148,7 +152,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             Employee employee = await db.Employees.FindAsync(id);
@@ -170,6 +174,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(EmployeeViewModel model)
         {
             Employee employee = await db.Employees.FindAsync(model.Entity.EmployeeId);
@@ -208,7 +213,7 @@ namespace CarSharing.Controllers
                 return false;
         }
 
-        private IQueryable<Employee> GetSortedEntities(SortState sortState,string employeePost, string employeeName, string employeesurname, string employeePatronymic)
+        private IQueryable<Employee> GetSortedEntities(SortState sortState,string employeePost, string employeeName, string employeesurname, string employeePatronymic, DateTime employmentDate)
         {
             IQueryable<Employee> employees = db.Employees.AsQueryable();
 
@@ -255,7 +260,10 @@ namespace CarSharing.Controllers
                 employees = employees.Where(g => g.Surname.Contains(employeesurname)).AsQueryable();
             if (!string.IsNullOrEmpty(employeePatronymic))
                 employees = employees.Where(g => g.Patronymic.Contains(employeePatronymic)).AsQueryable();
-
+            if (employmentDate != default)
+            {
+                employees = employees.Where(g => g.EmploymentDate.Date == employmentDate.Date).AsQueryable();
+            }
             return employees;
         }
     }

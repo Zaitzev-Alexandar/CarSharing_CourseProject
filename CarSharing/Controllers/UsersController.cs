@@ -34,7 +34,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             UsersViewModel model = new UsersViewModel
@@ -46,6 +46,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(UsersViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -73,7 +74,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id)
         {
             User user = await manager.FindByIdAsync(id);
@@ -90,6 +91,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(UsersViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -119,7 +121,7 @@ namespace Lab5_WebApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(string id)
         {
             User user = await manager.FindByIdAsync(id);
@@ -141,6 +143,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(UsersViewModel model)
         {
             User user = await manager.FindByIdAsync(model.Entity.Id);
@@ -171,7 +174,7 @@ namespace Lab5_WebApp.Controllers
             model.DeleteViewModel.IsDeleted = true;
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangePassword(string id)
         {
             User user = await manager.FindByIdAsync(id);
@@ -188,6 +191,7 @@ namespace Lab5_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangePassword(UsersViewModel model)
         {
             if (ModelState.IsValid)

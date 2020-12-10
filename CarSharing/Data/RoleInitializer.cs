@@ -11,7 +11,7 @@ namespace CarSharing.Data
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "admin@lab05.by";
+            string adminEmail = "admin@admin.by";
             string password = "1!Admin";
             if (await roleManager.FindByNameAsync("admin") == null)
             {

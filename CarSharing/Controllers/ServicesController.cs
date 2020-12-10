@@ -75,7 +75,7 @@ namespace CarSharing.Controllers
 
             return RedirectToAction("Index", new { page });
         }
-
+        [Authorize(Roles = "admin")]
         public IActionResult Create(int page)
         {
             ServiceViewModel model = new ServiceViewModel
@@ -87,6 +87,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(ServiceViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -101,7 +102,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, int page)
         {
             Service service = await db.Services.FindAsync(id);
@@ -118,6 +119,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(ServiceViewModel model)
         {
             if (ModelState.IsValid & CheckUniqueValues(model.Entity))
@@ -144,7 +146,7 @@ namespace CarSharing.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id, int page)
         {
             Service service = await db.Services.FindAsync(id);
@@ -166,6 +168,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(ServiceViewModel model)
         {
             Service service = await db.Services.FindAsync(model.Entity.ServiceId);

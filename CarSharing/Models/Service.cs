@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace CarSharing.Models
 {
@@ -11,8 +13,9 @@ namespace CarSharing.Models
         }
 
         public int ServiceId { get; set; }
+        [Display(Name = "Service name")]
         public string Name { get; set; }
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
         public string Description { get; set; }
 
         public virtual ICollection<AdditionalService> AdditionalServices { get; set; }

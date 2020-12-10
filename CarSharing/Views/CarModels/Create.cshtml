@@ -24,7 +24,7 @@
         <p><span asp-validation-for="Entity.Description" class="text-danger"></span></p>
 
         <p>
-            <label asp-for="Entity.CarMarkId"></label><br />
+            <label asp-for="Entity.CarMark.Name"></label><br />
             <input type="search" list="genres" asp-for="CarMarkName" class="w-75" />
             <datalist id="genres">
                 @foreach (var item in Model.SelectList)
